@@ -47,6 +47,9 @@
     <aside class="history"></aside>
 
     <script async>
+
+     if( localStorage.getItem('token') === null || localStorage.getItem('token') === undefined ){ window.location.replace('./auth/login') }
+
       var exp = document.getElementById("expression").value;
       var queue = [];
       let keyArr = document.getElementsByClassName("tile");

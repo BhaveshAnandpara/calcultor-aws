@@ -62,9 +62,12 @@
 		  throw Error(response);
 
 		}
-
+	
 		response = await response.json()
-		alert(response)
+
+		localStorage.setItem( 'token' , response.token );
+
+		alert(response.msg)
 		window.location.replace('../home')
 
 	    }).catch((err)=>{
