@@ -3,6 +3,7 @@ var app = express();
 const router = express.Router();
 const path = require("path");
 const mysql = require("mysql2");
+const jwt = require("jsonwebtoken");
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
@@ -19,6 +20,21 @@ db.connect((err) => {
     console.error("Error connecting to MySQL:", err);
   }
 });
+
+
+// json web token
+
+const createToken = (email)=>{
+
+	  //Geneartes Accesstoken
+	  const accesstoken = jwt.sign({ email }, process.env.HASHSECRET, {
+	    expiresIn: "30d",
+	  });
+
+	return accesstoken;
+
+}
+
 
 //query function
 
@@ -65,7 +81,7 @@ router.post("/signup", async (req, res) => {
       res.status(500).json(`error occured in mysql , ${err}`)
     })
 
-    res.status(200).json('user added successfully')
+    res.status(200).json( { msg : "User Added Successfully Successfull"  , token : createToken(email) } );
 
 
   } catch (err) {
@@ -96,7 +112,7 @@ router.post("/login" , async(req,res)=>{
 
 		if( pass !== password ) return res.status(500).json("Inavlid Password")
 
-		res.status(200).json("Log In Successfull");
+		res.status(200).json( { msg : "Log In Successfull"  , token : createToken(email) } );
 
 
 	}
