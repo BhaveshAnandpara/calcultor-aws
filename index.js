@@ -9,10 +9,10 @@ const AuthRoute = require('./routes/auth');
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
-  host: 'calculator-db.c96ci228cb5p.ap-south-1.rds.amazonaws.com',
+  host: process.env.DB_HOST,
   user: 'admin',
-  password: 'vnljD6wWOzhvNeotZ3Zv',
-  database: 'calculator-db',
+  password: process.env.DB_PASS,
+  database: 'calculator_db',
   port:3306
 });
 
@@ -53,7 +53,17 @@ app.use(function(req, res, next) {
 
 
 // app.get('/signup', (req, res) => {
-//     res.sendFile(path.join(__dirname, './signup.html'));
+
+//   const sql = {}
+
+//   db.query(sql, (err, result) => {
+//     if (err) {
+//       console.error('Error creating table:', err);
+//     } else {
+//       console.log('Table created or already exists');
+//     }
+//   });
+
 // });
 
 
