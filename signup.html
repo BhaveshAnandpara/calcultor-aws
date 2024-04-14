@@ -55,7 +55,8 @@
                 const pass = document.getElementById('password').value
                 const conPass = document.getElementById('c-password').value
 
-                if( email == "" || pass == "" || conPass == "" ||  pass !== conPass ) return alert('Password and Confirm Password does not match')
+                if( email == ""  ) return alert('email cannot be empty')
+                if(  pass == "" || conPass == "" ||  pass !== conPass ) return alert('Password and Confirm Password does not match')
 
                 //send request to backend
 
