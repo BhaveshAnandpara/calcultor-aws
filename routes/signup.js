@@ -3,6 +3,7 @@ var app = express();
 const router = express.Router();
 const path = require("path");
 const mysql = require("mysql2");
+const { rejects } = require("assert");
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
@@ -27,7 +28,9 @@ const query = (q) => {
   console.log(q);
 
   return new Promise((resolve , reject)=>{
+
     db.query(q, (err, results,fields) => {
+      console.log(err)
       if (err) {
         reject(err);
       } else {
@@ -49,14 +52,13 @@ router.get("/login", async (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { email, password } = req.body;
 
-    console.log({email , password});
+    const { email, password } = req.body;
 
     let userExists = await query(`select count(id) as count from user where email='${email}';`)
     userExists = userExists[0].count
-    if(userExists != 0) return res.status(200).json("user already exists")
-
+	console.log(userExists)
+    if( userExists > 0) return res.send(200).json("user already exists")
 
     query(`insert into user values(NULL, '${email}' , '${password}');`).catch((err)=>{
       res.status(500).json(`error occured in mysql , ${err}`)
@@ -65,11 +67,7 @@ router.post("/signup", async (req, res) => {
     res.status(200).json('user added successfully')
 
 
-  } catch (err) {
-
-	res.status(500).json(err);
-
-  }
+  } catch (err) {}
 });
 
 module.exports = router;
