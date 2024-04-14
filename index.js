@@ -52,19 +52,11 @@ app.use(function(req, res, next) {
 
 
 
-// app.get('/signup', (req, res) => {
+app.get('/', (req, res) => {
 
-//   const sql = {}
+  res.send('Working')
 
-//   db.query(sql, (err, result) => {
-//     if (err) {
-//       console.error('Error creating table:', err);
-//     } else {
-//       console.log('Table created or already exists');
-//     }
-//   });
-
-// });
+});
 
 
 // Routes
