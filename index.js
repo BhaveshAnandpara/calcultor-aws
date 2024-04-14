@@ -8,7 +8,7 @@ const path = require('path');
 const AuthRoute = require('./routes/auth');
 
 // Your MySQL RDS database configuration
-const db = mysql.createConnection({
+export const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: 'admin',
   password: process.env.DB_PASS,
