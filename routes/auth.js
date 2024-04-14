@@ -58,7 +58,7 @@ router.post("/signup", async (req, res) => {
 
     let userExists = await query(`select count(id) as count from user where email='${email}';`)
     userExists = userExists[0].count
-    if(userExists != 0) return res.status(200).json("user already exists")
+    if(userExists != 0) return res.status(200).json("user already exists. try logging in")
 
 
     query(`insert into user values(NULL, '${email}' , '${password}');`).catch((err)=>{
@@ -69,10 +69,42 @@ router.post("/signup", async (req, res) => {
 
 
   } catch (err) {
-
+	console.log(err)
 	res.status(500).json(err);
 
   }
 });
+
+router.post("/login" , async(req,res)=>{
+
+	try{
+
+		const {email ,password} = req.body
+		console.log( {email,password} );
+
+
+	        if( email == "" || email == null || email == undefined ) return res.status(500).json('email cannot be empty')
+                if( password == "" || password == null || password == undefined ) return res.status(500).json('password cannot be empty');
+
+		let userExists = await query(`select count(id) as count, password from user where email='${email}';`)
+
+		console.log(userExists)
+
+		let pass = userExists[0].password
+		userExists = userExists[0].count
+		if(userExists == 0) return res.status(200).json("Invalid Email")
+
+		if( pass !== password ) return res.status(200).json("Inavlid Password")
+
+		res.status(200).json("Log In Successfull");
+
+
+	}
+	catch(err){
+		console.log(err)
+		res.status(500).json(err)
+	}
+
+})
 
 module.exports = router;
