@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+    <link rel="stylesheet" href="../css/auth.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main>
+      <h2>SIGN UP</h2>
+
+      <section class="signupform">
+        <input
+          id="email"
+          type="email"
+          class="email inp"
+          placeholder="Type your Email..."
+        />
+        <input
+          id="password"
+          type="password"
+          class="pass inp"
+          placeholder="Type your Password..."
+        />
+        <input
+          id="c-password"
+          type="password"
+          class="pass inp"
+          placeholder="Confirm Password..."
+        />
+
+        <button id="signup-btn">Create Your Account</button>
+      </section>
+
+      <section class="login-note">
+        <p>Already has an account ? <a href="./login">Login</a></p>
+      </section>
+    </main>
+
+    <script async >
+
+            const cta = document.getElementById('signup-btn')
+            cta.onclick = handleSignUp
+
+            async function handleSignUp(){
+
+                const email = document.getElementById('email')
+                const pass = document.getElementById('password').value
+                const conPass = document.getElementById('c-password').value
+
+                if( email == "" || pass == "" || conPass == "" ||  pass !== conPass ) return alert('Password and Confirm Password does not match')
+
+                //send request to backend
+
+                const data = { email, password : pass }
+
+                const response = await fetch( "http://localhost:080/auth/signup", {
+                    method: "POST", 
+                    mode: "cors", 
+                    cache: "no-cache", 
+                    credentials: "same-origin", 
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    redirect: "follow", 
+                    referrerPolicy: "no-referrer", 
+                    body: JSON.stringify(data), 
+                });
+
+                response = await response.json()
+                console.log(response3);
+
+            }
+    </script>
+  </body>
+</html>
