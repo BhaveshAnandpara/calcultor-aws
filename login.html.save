@@ -17,8 +17,8 @@
       <h2>LOG IN</h2>
 
       <section class="loginform">
-        <input id="email" type="email" class="email inp"  placeholder="Type your Email..." />
-        <input id="password" type="password" class="pass inp"  placeholder="Type your Password..." />
+        <input type="email" class="email inp"  placeholder="Type your Email..." />
+        <input type="password" class="pass inp"  placeholder="Type your Password..." />
         <button id="login-btn" >Login</button>
       </section>
 
@@ -34,7 +34,7 @@
 
         async function handleLogin(){
 
-            const email = document.getElementById('email').value
+            const email = document.getElementById('email')
             const pass = document.getElementById('password').value
 
             if( pass == "" || email == "" ) return alert('All fields are required')
@@ -43,7 +43,7 @@
 
             const data = { email, password : pass }
 
-            let response = await fetch( "http://ec2-13-201-56-251.ap-south-1.compute.amazonaws.com:8080/auth/login", {
+            const response = await fetch( "", {
                 method: "POST", 
                 mode: "cors", 
                 cache: "no-cache", 
@@ -54,24 +54,10 @@
                 redirect: "follow", 
                 referrerPolicy: "no-referrer", 
                 body: JSON.stringify(data), 
-            }).then( async (response)=>{
+            });
 
-		if( response.status != 200 ){
-
-		  response = await response.json()
-		  throw Error(response);
-
-		}
-
-		response = await response.json()
-		alert(response)
-		window.location.replace('../home')
-
-	    }).catch((err)=>{
-
-		alert(err)	
-
-	    })
+            response = await response.json()
+            console.log(response3);
 
         }
 </script>

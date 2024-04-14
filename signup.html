@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -74,11 +73,18 @@
                     referrerPolicy: "no-referrer", 
                     body: JSON.stringify(data), 
                 }).then(async (response)=>{
+		 
+		  if( response.status != 200 ){
+
+		    response = await response.json()
+		    throw Error(response);
+
+		  }
 
 		  response = await response.json()
 
 		  alert(response);
-		  window.location.replace('./home')
+		  window.location.replace('../home')
 
 		}).catch( (err)=>{
 		  alert(err)

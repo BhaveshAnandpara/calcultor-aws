@@ -58,7 +58,7 @@ router.post("/signup", async (req, res) => {
 
     let userExists = await query(`select count(id) as count from user where email='${email}';`)
     userExists = userExists[0].count
-    if(userExists != 0) return res.status(200).json("user already exists. try logging in")
+    if(userExists != 0) return res.status(500).json("user already exists. try logging in")
 
 
     query(`insert into user values(NULL, '${email}' , '${password}');`).catch((err)=>{
@@ -92,9 +92,9 @@ router.post("/login" , async(req,res)=>{
 
 		let pass = userExists[0].password
 		userExists = userExists[0].count
-		if(userExists == 0) return res.status(200).json("Invalid Email")
+		if(userExists == 0) return res.status(500).json("Invalid Email")
 
-		if( pass !== password ) return res.status(200).json("Inavlid Password")
+		if( pass !== password ) return res.status(500).json("Inavlid Password")
 
 		res.status(200).json("Log In Successfull");
 
