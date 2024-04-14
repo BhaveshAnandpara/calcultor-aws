@@ -65,5 +65,3 @@ app.use("/auth", AuthRoute);
 // connection
 const port = 8080;
 app.listen(port, () => console.log(`Listening to port ${port}`));
-
-module.exports = {db}
