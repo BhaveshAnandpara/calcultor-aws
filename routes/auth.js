@@ -51,12 +51,18 @@ router.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log({email , password});
+
     let userExists = await query(`select count(id) from user where email='${email}';`)
     if(userExists != 0) res.send(200).json("user already exists")
+
+    console.log("new user");
 
     query(`insert into user values(NULL, '${email}' , '${password}');`).catch((err)=>{
       res.status(500).json(`error occured in mysql , ${err}`)
     })
+
+    console.log("done");
 
     res.send(200).json('user added successfully')
 
