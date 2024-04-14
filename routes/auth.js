@@ -14,7 +14,7 @@ router.get("/login", async (req, res) => {
 router.post("/signup", async (req, res) => {
   try {
 
-    
+    res.json(req.body)
 
   } catch (err) {}
 });
