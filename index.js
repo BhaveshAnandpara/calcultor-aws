@@ -7,23 +7,23 @@ const path = require('path');
 
 const AuthRoute = require('./routes/auth');
 
-// Your MySQL RDS database configuration
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: 'admin',
-  password: process.env.DB_PASS,
-  database: 'calculator_db',
-  port:3306
-});
+// // Your MySQL RDS database configuration
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: 'admin',
+//   password: process.env.DB_PASS,
+//   database: 'calculator_db',
+//   port:3306
+// });
 
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-  } else {
-    console.log('Connected to MySQL');
-  }
-});
+// // Connect to the database
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//   } else {
+//     console.log('Connected to MySQL');
+//   }
+// });
 
 // Middlewares
 const app = express();
