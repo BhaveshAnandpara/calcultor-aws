@@ -58,6 +58,12 @@ app.get('/', (req, res) => {
 
 });
 
+app.get('/home', (req, res) => {
+	res.sendFile(path.join(__dirname, 'home.html'));
+});
+
+
+
 
 // Routes
 app.use("/auth", AuthRoute);
