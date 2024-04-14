@@ -8,7 +8,7 @@ const path = require('path');
 const AuthRoute = require('./routes/auth');
 
 // Your MySQL RDS database configuration
-export const db = mysql.createConnection({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: 'admin',
   password: process.env.DB_PASS,
@@ -65,3 +65,5 @@ app.use("/auth", AuthRoute);
 // connection
 const port = 8080;
 app.listen(port, () => console.log(`Listening to port ${port}`));
+
+module.exports = {db}
