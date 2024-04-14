@@ -31,7 +31,7 @@ const query = (q) => {
     
     db.query(q, (err, results) => {
       console.log(err);
-      console.log(results);
+      console.log(JSON.parse(results));
       if (err) {
         reject(err);
       } else {
