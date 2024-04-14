@@ -31,7 +31,7 @@ const query = (q) => {
     
     db.query(q, (err, results) => {
       console.log(err);
-      console.log(JSON.parse(results));
+      console.log( [results] );
       if (err) {
         reject(err);
       } else {
@@ -57,7 +57,7 @@ router.post("/signup", async (req, res) => {
 
     console.log({email , password});
 
-    let userExists = await query(`select count(id) from user where email='${email}';`)
+    let userExists = await query(`select count(id) as count from user where email='${email}';`)
     if(userExists != 0) res.send(200).json("user already exists")
 
     console.log("new user");
