@@ -53,6 +53,9 @@ router.post("/signup", async (req, res) => {
 
     console.log({email , password});
 
+    if( email == "" || email == null || email == undefined ) return res.status(500).json('email cannot be empty')
+    if( password == "" || password == null || password == undefined ) return res.status(500).json('password cannot be empty');
+
     let userExists = await query(`select count(id) as count from user where email='${email}';`)
     userExists = userExists[0].count
     if(userExists != 0) return res.status(200).json("user already exists")
