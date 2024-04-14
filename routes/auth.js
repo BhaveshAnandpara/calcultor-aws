@@ -25,9 +25,13 @@ db.connect((err) => {
 
 const query = (q) => {
 
+  console.log(q);
+
   return new Promise((resolve , reject)=>{
     
     db.query(q, (err, results) => {
+      console.log(err);
+      console.log(results);
       if (err) {
         reject(err);
       } else {
