@@ -62,8 +62,8 @@ router.post("/history", async (req, res) => {
 		
 
    try {
-	
-	console.log(req.headers['x-access-token'])
+
+     //console.log(req.headers['x-access-token'])
 
      let user = await verifyUser( req.headers['x-access-token'] ).catch(err=> res.status(500).json(err))
 
@@ -74,7 +74,7 @@ router.post("/history", async (req, res) => {
 	const date = new Date();
 	let curr = date.toISOString().slice(0, 19).replace('T', ' ');
 
-     query( `insert into history( id, user_id, expression, result, history_date)  values ( NULL, ${user_id[0].id}, '${expression}' , ${result}, '${curr}' );` )
+     await  query( `insert into history( id, user_id, expression, result, history_date)  values ( NULL, ${user_id[0].id}, '${expression}' , ${result}, '${curr}' );` ).then((res)=>{ res.status(200).json('Added Successflly')  }).catch(err=>{ throw Error(err)  })
 
    } catch (err) {
  	console.log(err)
@@ -83,6 +83,26 @@ router.post("/history", async (req, res) => {
    }
 
 });
+
+router.get( '/history', async(req,res)=>{
+
+	try{ 
+
+		let user = await verifyUser(req.headers['x-access-token']).catch(err=>res.status(500).json('Not Authorized'));
+
+		const user_id = await query( `select id from user where email='${user.email}'` );
+
+		const history = await query(`select expression, result, history_date from history where user_id=${user_id[0].id};`)
+		res.status(200).json(history);
+
+	}catch(err){
+
+		console.log(err)
+		res.status(500).json(err)
+
+	}
+
+} )
 
 
 module.exports = router;

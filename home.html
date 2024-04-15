@@ -44,11 +44,53 @@
       </section>
     </main>
 
-    <aside class="history"></aside>
+    <aside id='history'  class="history">
+
+	<div id="history-container">  </div>
+
+    </aside>
 
     <script async>
 
      if( localStorage.getItem('token') === null || localStorage.getItem('token') === undefined ){ window.location.replace('./auth/login') }
+
+	get_history();
+
+	async function get_history(){
+
+         const myHeaders = new Headers();
+
+          myHeaders.append('Content-Type', 'application/json');
+          myHeaders.append('x-access-token', localStorage.getItem('token'));
+
+	  let response = await fetch(
+            "http://calculator-lb-579537762.ap-south-1.elb.amazonaws.com/data/history",
+            {
+              method: "GET",
+              mode: "cors",
+              cache: "no-cache",
+              credentials: "same-origin",
+              headers: myHeaders,
+              redirect: "follow",
+              referrerPolicy: "no-referrer",
+            }
+          ).then(async (res)=>{
+
+		res = await res.json();
+		console.log(res)
+
+		let historyHTML = ""
+		res.forEach( exp =>{ 	
+			historyHTML += `<div class='history-tile' > ${exp.expression} = ${exp.result} </div>`			
+		})
+
+		document.getElementById('history-container').innerHTML = historyHTML;
+	
+	 })
+
+
+	}
+
 
       var exp = document.getElementById("expression").value;
       var queue = [];
@@ -63,6 +105,7 @@
       }
 
       async function updateExp(character) {
+
         if (character === "C" || character === "CE") {
           exp = "";
           queue = [];
@@ -91,7 +134,7 @@
         ) {
         } else if (character === "=") {
 
-          let res = findSolution(0);
+          let res = await findSolution(0);
 
           let data = { expression : exp, result : res };
 
@@ -103,10 +146,7 @@
           myHeaders.append('Content-Type', 'application/json');
           myHeaders.append('x-access-token', localStorage.getItem('token'));
 
-	console.log( localStorage.getItem('token') )
-	console.log( data )
-
-          let response = await fetch(
+          let response =  fetch(
             "http://calculator-lb-579537762.ap-south-1.elb.amazonaws.com/data/history",
             {
               method: "POST",
@@ -118,16 +158,26 @@
               referrerPolicy: "no-referrer",
               body: JSON.stringify(data),
             }
-          );
+          ).then(()=>{
+		console.log('Nice')
+		get_history();
+	})
 
         } else {
           exp += character;
           queue.push(character);
         }
+
         document.getElementById("expression").value = exp;
       }
 
-      function findSolution(idx) {
+      async function findSolution(idx) {
+
+	return new Promise(async (resolve , reject)=>{
+
+	try{
+
+
         let ans = 0;
         let op = "+";
 
@@ -140,7 +190,7 @@
             else if (op == "x") ans *= parseInt(val);
             else if (op == "/") ans /= parseInt(val);
           } else if (val === "(") {
-            let { res, newIdx } = findSolution(idx + 1);
+            let { res, newIdx } = await findSolution(idx + 1);
             i = newIdx;
             ans = res;
           } else if (val === ")") {
@@ -150,7 +200,14 @@
           }
         }
 
-        return ans;
+        resolve(ans);
+	}catch(err){
+	
+	reject(err)
+
+	}
+
+	})
       }
     </script>
   </body>

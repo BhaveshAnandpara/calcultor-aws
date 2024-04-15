@@ -17,7 +17,6 @@ main{
     width: 50%;
     max-height: 100vh;
     height: 100vh;
-    border: 1px solid black;
 }
 
 .expression{
@@ -38,12 +37,13 @@ main{
 .history{
 
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     flex-direction: column;
-    width: max-content;
+    width: 100%;
     margin: auto;
-    border: 1px solid black;
+    height: 100%;
+    overflow: hidden;
 
 }
 
@@ -73,3 +73,26 @@ main{
 .tile:hover{
     background-color: blueviolet;
 }
+
+.history-tile{
+
+    width: 80%;
+    box-sizing : border-box;
+    background-color: #ccc;
+    padding: 16px;
+    margin: 12px 0px;   
+    border-radius : 4px;
+
+}
+
+#history-container{
+   width: 100%;
+    overflow: scroll;
+    height: auto;
+    display:flex;
+    flex-direction : column-reverse;
+    align-items : center;
+
+}
+
+
