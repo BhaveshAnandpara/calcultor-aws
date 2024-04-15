@@ -6,6 +6,7 @@ const mysql = require('mysql2');
 const path = require('path');
 
 const AuthRoute = require('./routes/auth');
+const HistoryRoute = require('./routes/history');
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
@@ -67,6 +68,7 @@ app.get('/home', (req, res) => {
 
 // Routes
 app.use("/auth", AuthRoute);
+app.use("/data", HistoryRoute);
 
 // connection
 const port = 8080;

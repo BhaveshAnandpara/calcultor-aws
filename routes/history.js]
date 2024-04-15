@@ -3,7 +3,6 @@ var app = express();
 const router = express.Router();
 const path = require("path");
 const mysql = require("mysql2");
-const jwt = require('jsonwebtoken');
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
@@ -21,22 +20,8 @@ db.connect((err) => {
   }
 });
 
-const verifyUser =  async (token)=>{
-
-    return new Promise( async ( resolve ,reject ) =>{
-
-	try{
-
-		let user = await jwt.verify(token, process.env.HASHSECRET)
-		resolve(user)
-
-	}catch(err){
-
-		reject(err)
-
-	}
-
-    })
+const verifyUser =  async (req,res)=>{
+    console.log(req.cookies)
 }
 
 const query = (q) => {
@@ -57,27 +42,23 @@ const query = (q) => {
 };
 
 
-router.post("/history", async (req, res) => {
+router.post("/history", verifyUser ,  async (req, res) => {
 
+console.log('Nice')
+ verifyUser( req,res)
 
-		
+//   try {
 
-   try {
+//     const { expression, result } = req.body;
 
-     let user = await verifyUser( req.headers['x-access-token'] ).catch(err=> res.status(500).json(err))
+//     let user_id = query( `insert into history values ( NULL, 9, "6+9" , 15.0, '2020-01-01' );` )
+//     query( `insert into history values ( NULL, 9, "6+9" , 15.0, '2020-01-01' );` )
 
-     const { expression, result } = req.body;
+//   } catch (err) {
+// 	console.log(err)
+// 	res.status(500).json(err);
 
-     let user_id = query( `select id from user where email='${user.email}'` )
-	console.log(user_id[0]);
-
-     query( `insert into history values ( NULL, ${user_id[0].id}, ${expression} , ${result}, '2020-01-01' );` )
-
-   } catch (err) {
- 	console.log(err)
- 	res.status(500).json(err);
-
-   }
+//   }
 
 });
 

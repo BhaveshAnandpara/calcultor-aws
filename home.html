@@ -92,7 +92,7 @@
         } else if (character === "=") {
           let res = findSolution(0);
 
-          let data = { exp, res };
+          let data = { expression : exp, result : res };
 
           exp = res;
           queue = [exp];
@@ -103,7 +103,7 @@
           myHeaders.append('Authorization', localStorage.getItem('token'));
 
           let response = await fetch(
-            "http://ec2-13-201-56-251.ap-south-1.compute.amazonaws.com:8080/history",
+            "http://calculator-lb-579537762.ap-south-1.elb.amazonaws.com/history",
             {
               method: "POST",
               mode: "cors",
