@@ -106,11 +106,12 @@
 
       async function updateExp(character) {
 
-        if (character === "C" || character === "CE") {
+
+        if (character == "C" || character == "CE") {
           exp = "";
           queue = [];
         }
-        if (ops.includes(character)) {
+        else if (ops.includes(character)) {
           if (ops.includes(queue[queue.length - 1])) {
             queue.pop();
             exp = exp.substring(0, exp.length - 1);
@@ -181,23 +182,46 @@
         let ans = 0;
         let op = "+";
 
-        for (let i = idx; i < queue.length; i++) {
+        for (let i = idx; i <= queue.length; i++) {
+
           let val = queue[i];
+	console.log(queue)
+	  console.log(val + " " + i);
 
           if (parseInt(val) <= 9 && parseInt(val) >= 0) {
-            if (op == "+") ans += parseInt(val);
-            else if (op == "-") ans -= parseInt(val);
-            else if (op == "x") ans *= parseInt(val);
-            else if (op == "/") ans /= parseInt(val);
+
+	   let count = 1;
+	   val = parseInt(val);
+	
+	   while( parseInt(queue[i+count]) <= 9 &&  parseInt(queue[i+count]) >= 0  ){
+
+		val *= 10;
+		val += parseInt(queue[i+count]);
+		count++;
+	
+	   }
+
+            if (op == "+") ans += val;
+            else if (op == "-") ans -= val;
+            else if (op == "x") ans *= val;
+            else if (op == "/") ans /= val;
+
+            i += count-1;	     
+
           } else if (val === "(") {
-            let { res, newIdx } = await findSolution(idx + 1);
+            let { res, newIdx } = await findSolution(i + 1);
+	    console.log({res, newIdx})
             i = newIdx;
             ans = res;
           } else if (val === ")") {
-            return { res: ans, newIdx: i + 1 };
+
+	    console.log({res:ans, newIdx:i})	    
+            return { res: ans, newIdx: i };
+
           } else if (ops.includes(val)) {
             op = val;
           }
+
         }
 
         resolve(ans);
