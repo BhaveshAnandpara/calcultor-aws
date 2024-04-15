@@ -82,8 +82,8 @@
 		  }
 
 		  response = await response.json()
-
-		  localStorage.setItem( 'token' . response.token );
+		  console.log(response)
+		  localStorage.setItem( 'token' , response.token );
 
 		  alert(response.msg);
 		  window.location.replace('../home')

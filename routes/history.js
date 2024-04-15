@@ -4,6 +4,12 @@ const router = express.Router();
 const path = require("path");
 const mysql = require("mysql2");
 const jwt = require('jsonwebtoken');
+const  { createClient } = require('redis')
+
+const client = createClient({url:'redis://redis-cache.nqwxcv.ng.0001.aps1.cache.amazonaws.com:6379'})
+client.on('error', err=>{ console.log(err) })
+const runClient = async ()=>{ await client.connect()};
+runClient();
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
@@ -27,9 +33,20 @@ const verifyUser =  async (token)=>{
 
 	try{
 
+		let res = await client.hGetAll(token).catch(err=>{ console.log(err) })
+		console.log(res)
+		if( res != null && res != undefined ) resolve(res);
+
 		let user = await jwt.verify(token, process.env.HASHSECRET)
-		console.log(user)
-		resolve(user)
+		console.log("user : " , user)
+
+		console.log("setting cache")
+		await client.hSet(token, user).then(()=>{ 
+
+			resolve(user)
+
+		 }).catch(err=>console.log(err))
+		
 
 	}catch(err){
 
@@ -59,7 +76,7 @@ const query = (q) => {
 
 
 router.post("/history", async (req, res) => {
-		
+
 
    try {
 
@@ -74,7 +91,9 @@ router.post("/history", async (req, res) => {
 	const date = new Date();
 	let curr = date.toISOString().slice(0, 19).replace('T', ' ');
 
-     await  query( `insert into history( id, user_id, expression, result, history_date)  values ( NULL, ${user_id[0].id}, '${expression}' , ${result}, '${curr}' );` ).then((res)=>{ res.status(200).json('Added Successflly')  }).catch(err=>{ throw Error(err)  })
+    let data =  await  query( `insert into history( id, user_id, expression, result, history_date)  values ( NULL, ${user_id[0].id}, '${expression}' , ${result}, '${curr}' );` ).catch(err=>{ throw Error(err)  })
+	
+	res.status(200).json('data added successfully')
 
    } catch (err) {
  	console.log(err)
@@ -98,7 +117,7 @@ router.get( '/history', async(req,res)=>{
 	}catch(err){
 
 		console.log(err)
-		res.status(500).json(err)
+		res.status(500).json([])
 
 	}
 
