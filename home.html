@@ -90,6 +90,7 @@
           character === "^/2"
         ) {
         } else if (character === "=") {
+
           let res = findSolution(0);
 
           let data = { expression : exp, result : res };
@@ -100,10 +101,13 @@
           const myHeaders = new Headers();
 
           myHeaders.append('Content-Type', 'application/json');
-          myHeaders.append('Authorization', localStorage.getItem('token'));
+          myHeaders.append('x-access-token', localStorage.getItem('token'));
+
+	console.log( localStorage.getItem('token') )
+	console.log( data )
 
           let response = await fetch(
-            "http://calculator-lb-579537762.ap-south-1.elb.amazonaws.com/history",
+            "http://calculator-lb-579537762.ap-south-1.elb.amazonaws.com/data/history",
             {
               method: "POST",
               mode: "cors",

@@ -28,6 +28,7 @@ const verifyUser =  async (token)=>{
 	try{
 
 		let user = await jwt.verify(token, process.env.HASHSECRET)
+		console.log(user)
 		resolve(user)
 
 	}catch(err){
@@ -58,20 +59,22 @@ const query = (q) => {
 
 
 router.post("/history", async (req, res) => {
-
-
 		
 
    try {
+	
+	console.log(req.headers['x-access-token'])
 
      let user = await verifyUser( req.headers['x-access-token'] ).catch(err=> res.status(500).json(err))
 
      const { expression, result } = req.body;
 
-     let user_id = query( `select id from user where email='${user.email}'` )
-	console.log(user_id[0]);
+     let user_id = await query( `select id from user where email='${user.email}'` )
 
-     query( `insert into history values ( NULL, ${user_id[0].id}, ${expression} , ${result}, '2020-01-01' );` )
+	const date = new Date();
+	let curr = date.toISOString().slice(0, 19).replace('T', ' ');
+
+     query( `insert into history( id, user_id, expression, result, history_date)  values ( NULL, ${user_id[0].id}, '${expression}' , ${result}, '${curr}' );` )
 
    } catch (err) {
  	console.log(err)
