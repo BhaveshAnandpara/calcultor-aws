@@ -6,7 +6,8 @@ const mysql = require("mysql2");
 const jwt = require('jsonwebtoken');
 const  { createClient } = require('redis')
 
-const client = createClient({url:'redis://redis-cache.nqwxcv.ng.0001.aps1.cache.amazonaws.com:6379'})
+
+const client = createClient({url:process.env.REDIS_ENDPOINT})
 client.on('error', err=>{ console.log(err) })
 const runClient = async ()=>{ await client.connect()};
 runClient();
