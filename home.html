@@ -64,7 +64,7 @@
           myHeaders.append('x-access-token', localStorage.getItem('token'));
 
 	  let response = await fetch(
-            "http://cal-alb-858666778.ap-south-1.elb.amazonaws.com:8080/data/history",
+            "https://cal-alb-858666778.ap-south-1.elb.amazonaws.com:8080/data/history",
             {
               method: "GET",
               mode: "cors",
@@ -152,7 +152,7 @@
           myHeaders.append('x-access-token', localStorage.getItem('token'));
 
           let response =  fetch(
-            "http://cal-alb-858666778.ap-south-1.elb.amazonaws.com:8080/data/history",
+            "https://cal-alb-858666778.ap-south-1.elb.amazonaws.com:8080/data/history",
             {
               method: "POST",
               mode: "cors",
