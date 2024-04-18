@@ -4,13 +4,13 @@ const router = express.Router();
 const path = require("path");
 const mysql = require("mysql2");
 const jwt = require('jsonwebtoken');
-//const  { createClient } = require('redis')
+const  { createClient } = require('redis')
 
 
-//const client = createClient({url:process.env.REDIS_ENDPOINT})
-//client.on('error', err=>{ console.log(err) })
-//const runClient = async ()=>{ await client.connect()};
-//runClient();
+const client = createClient({url:process.env.REDIS_ENDPOINT})
+client.on('error', err=>{ console.log(err) })
+const runClient = async ()=>{ await client.connect()};
+runClient();
 
 // Your MySQL RDS database configuration
 const db = mysql.createConnection({
@@ -34,15 +34,15 @@ const verifyUser =  async (token)=>{
 
 	try{
 
-		//let res = await client.hGetAll(token).catch(err=>{ console.log(err) })
-		//console.log(res)
-		//if( res != null && res != undefined ) resolve(res);
+		let res = await client.hGetAll(token).catch(err=>{ console.log(err) })
+		console.log(res)
+		if( res != null && res != undefined ) resolve(res);
 
 		let user = await jwt.verify(token, process.env.HASHSECRET)
 		console.log("user : " , user)
 
-		//console.log("setting cache")
-		//await client.hSet(token, user).then(()=>{ 
+		console.log("setting cache")
+		await client.hSet(token, user).then(()=>{ 
 
 			resolve(user)
 
